@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('access_tokens', function (Blueprint $table) {
             $table->id();
-            $table->string('client_secret')->unique(); // Client Key
-            $table->string('channel_id'); // Channel ID
-            $table->text('rsa_public_key'); // Public Key RSA
-            $table->string('partner_id', 50)->unique(); // Partner ID
-            $table->string('ip_address')->nullable();
+            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->string('access_token', 64)->unique();
+            $table->timestamp('expires_at');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('access_tokens');
     }
 };
