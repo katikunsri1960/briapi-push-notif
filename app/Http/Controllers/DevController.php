@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
+use App\Models\BankInfo;
 use Illuminate\Http\Request;
 
 class DevController extends Controller
@@ -22,7 +22,9 @@ class DevController extends Controller
             'ip_address' => 'nullable|string',
         ]);
 
-        $client = Client::create($data);
+        $data['channel_id'] = 'BAPE';
+
+        $client = BankInfo::create($data);
 
         return redirect()->route('dev.index')->with('success', 'Client created successfully');
     }

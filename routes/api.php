@@ -9,6 +9,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::post('/snap/v1.0/access-token/b2b', [AccessTokenController::class, 'getToken']);
+Route::post('/access-token/b2b', [AccessTokenController::class, 'getToken']);
 
 

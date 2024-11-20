@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
 use App\Models\AccessToken;
+use App\Models\BankInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -12,24 +12,24 @@ class AccessTokenController extends Controller
     public function getToken(Request $request)
     {
         // Ambil header
-        $clientKey = $request->header('X-CLIENT-KEY');
+        $clientId = $request->header('X-CLIENT-KEY');
         $signature = $request->header('X-SIGNATURE');
         $timestamp = $request->header('X-TIMESTAMP');
 
         // Validasi keberadaan header
-        if (!$clientKey || !$signature || !$timestamp) {
+        if (!$clientId || !$signature || !$timestamp) {
             return response()->json(['message' => 'missingRequiredHeaders'], 400);
         }
 
-        // Cari client berdasarkan Client Key
-        $client = Client::where('client_secret', $clientKey)->first();
-        if (!$client) {
-            return response()->json(['message' => 'invalidClientKey'], 401);
+        // Cari bank info berdasarkan Client ID
+        $bankInfo = BankInfo::where('client_id', $clientId)->first();
+        if (!$bankInfo) {
+            return response()->json(['message' => 'invalidClientId'], 401);
         }
 
         // Validasi Signature RSA
         $payload = json_encode(['grantType' => $request->grantType], JSON_UNESCAPED_SLASHES);
-        $publicKey = openssl_pkey_get_public($client->rsa_public_key);
+        $publicKey = openssl_pkey_get_public($bankInfo->rsa_public_key);
 
         $isValidSignature = openssl_verify(
             $payload . $timestamp,
@@ -47,7 +47,7 @@ class AccessTokenController extends Controller
 
         // Simpan token
         AccessToken::create([
-            'client_id' => $client->id,
+            'bank_info_id' => $bankInfo->id,
             'access_token' => $accessToken,
             'expires_at' => now()->addMinutes(30),
         ]);

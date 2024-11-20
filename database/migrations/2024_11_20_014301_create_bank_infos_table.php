@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('bank_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('client_secret')->unique(); // Client Key
+            $table->string('client_id')->unique(); // Client ID
+            $table->string('client_secret'); // Client Secret
             $table->string('channel_id'); // Channel ID
+            $table->string('partner_id'); // Partner ID
             $table->text('rsa_public_key'); // Public Key RSA
-            $table->string('partner_id', 50)->unique(); // Partner ID
-            $table->string('ip_address')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('bank_infos');
     }
 };

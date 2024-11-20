@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('access_tokens', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->foreignId('bank_info_id')->constrained('bank_infos')->onDelete('cascade');
             $table->string('access_token', 64)->unique();
             $table->timestamp('expires_at');
             $table->timestamps();
