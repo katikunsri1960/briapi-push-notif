@@ -88,6 +88,6 @@ class AccessTokenController extends Controller
             'accessToken' => $accessToken,
             'tokenType' => 'BearerToken',
             'expiresIn' => 899, // 15 menit dalam detik (899 detik sesuai SNAP BI)
-        ]);
+        ], 200);
     }
 }
