@@ -68,13 +68,14 @@ class AccessTokenController extends Controller
         AccessToken::create([
             'bank_info_id' => $bankInfo->id,
             'access_token' => $accessToken,
-            'expires_at' => now()->addMinutes(30),
+            'expires_at' => now()->addMinutes(15), // 15 menit sesuai SNAP BI
         ]);
 
-        // Response camelCase
+        // Response sesuai standar SNAP BI
         return response()->json([
             'accessToken' => $accessToken,
-            'expiresAt' => now()->addMinutes(30)->toISOString(),
+            'tokenType' => 'BearerToken',
+            'expiresIn' => 899, // 15 menit dalam detik (899 detik sesuai SNAP BI)
         ]);
     }
 }
