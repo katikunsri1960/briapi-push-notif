@@ -62,7 +62,7 @@ class AccessTokenController extends Controller
         }
 
         // Generate Access Token
-        $accessToken = Str::random(64);
+        $accessToken = Str::random(32);
 
         // Simpan token ke database
         AccessToken::create([
