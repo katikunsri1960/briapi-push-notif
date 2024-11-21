@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class AccessToken extends Model
 {
     protected $guarded = ['id'];
-    
-    public function client()
+
+    public function bank()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(BankInfo::class);
     }
 }
