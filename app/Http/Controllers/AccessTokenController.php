@@ -30,14 +30,20 @@ class AccessTokenController extends Controller
         // Cari bank info berdasarkan Client ID
         $bankInfo = BankInfo::where('client_id', $clientId)->first();
         if (!$bankInfo) {
-            return response()->json(['message' => 'invalidClientId'], 401);
+            return response()->json([
+                "responseCode" => "4017300",
+                "responseMessage" => "Unauthorized. stringToSign"
+            ], 401);
         }
 
         // Cek validitas timestamp (maksimal perbedaan 5 menit)
         $requestTime = Carbon::parse($timestamp);
         $currentTime = now();
         if ($currentTime->diffInSeconds($requestTime) > 300) { // 5 menit
-            return response()->json(['message' => 'timestampExpired'], 403);
+            return response()->json([
+                "responseCode" => "4037300",
+                "responseMessage" => "timestampExpired"
+            ], 403);
         }
 
         // Buat payload untuk validasi signature
@@ -47,7 +53,10 @@ class AccessTokenController extends Controller
         $publicKey = openssl_pkey_get_public($bankInfo->rsa_public_key);
 
         if (!$publicKey) {
-            return response()->json(['message' => 'invalidPublicKey'], 500);
+            return response()->json([
+                "responseCode" => "4017300",
+                "responseMessage" => "Unauthorized. stringToSign"
+            ], 401);
         }
 
         $isValidSignature = openssl_verify(
@@ -58,7 +67,10 @@ class AccessTokenController extends Controller
         );
 
         if ($isValidSignature !== 1) { // 1 berarti valid, 0 tidak valid, -1 error
-            return response()->json(['message' => 'invalidSignature'], 403);
+            return response()->json([
+                "responseCode" => "4017300",
+                "responseMessage" => "Unauthorized. stringToSign"
+            ], 401);
         }
 
         // Generate Access Token
