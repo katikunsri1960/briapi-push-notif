@@ -9,9 +9,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="w-full my-9">
+                        <x-link-button >
+                            Add Bank Info
+                        </x-link-button>
+                    </div>
 
-
-                    <div class="relative overflow-x-auto">
+                    <div class="relative overflow-x-auto mt-6">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
                                 class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -47,7 +51,12 @@
                                         {{$d->client_secret}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{$d->rsa_public_key}}
+                                        {{Str::substr($d->rsa_public_key, 0, 64)}} ........
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <x-primary-button>
+                                            Edit
+                                        </x-primary-button>
                                     </td>
                                 </tr>
                                 @endforeach
