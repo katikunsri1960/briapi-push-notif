@@ -14,7 +14,7 @@ class TagihanController extends Controller
 
         $data = TagihanVAUnsri::where('id_semester', $semester)->get();
 
-        return view('tagihan.index', ['data' => $data]);
+        return view('tagihan.index', ['data' => $data, 'semester' => $semester]);
     }
 
     public function get_tagihan_unsri(Request $request){
