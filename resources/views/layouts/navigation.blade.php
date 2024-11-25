@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('bank-info')" :active="request()->routeIs('bank-info')">
                         {{ __('Bank Info') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('tagihan')" :active="request()->routeIs('tagihan')">
+                        {{ __('Tagihan') }}
+                    </x-nav-link>
                 </div>
             </div>
 
