@@ -20,6 +20,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('bank-info')->group(function(){
         Route::get('/', [BankInfoController::class, 'index'])->name('bank-info');
     });
+
+    Route::prefix('tagihan')->group(function(){
+        Route::get('/', [App\Http\Controllers\Tagihan\TagihanController::class, 'index'])->name('tagihan');
+    });
 });
 
 require __DIR__.'/auth.php';
