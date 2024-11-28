@@ -13,6 +13,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 });
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -21,6 +22,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [BankInfoController::class, 'index'])->name('bank-info');
         Route::post('/', [BankInfoController::class, 'store'])->name('bank-info.store');
         Route::delete('/{bankInfo}', [BankInfoController::class, 'destroy'])->name('bank-info.destroy');
+        Route::patch('/{bankInfo}', [BankInfoController::class, 'update'])->name('bank-info.update');
     });
 
     Route::prefix('tagihan')->group(function(){

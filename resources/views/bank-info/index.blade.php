@@ -13,6 +13,7 @@
                         <x-button-modal modalName='addBankInfo'>Add Bank Info</x-button-modal>
                     </div>
                     @include('bank-info.create')
+                    @include('bank-info.edit')
                     <div class="relative overflow-x-auto mt-6">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="search-table">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -35,8 +36,11 @@
                                     <td class="px-6 py-4">{{ Str::substr($d->rsa_public_key, 0, 64) }} ........</td>
                                     <td class="px-6 py-4">
                                         <div class="inline-flex">
-                                            <x-primary-button class="m-2"><i class="fa fa-pencil"></i></x-primary-button>
-                                            <form x-data @submit.prevent="confirmSubmission($event)" action="{{ route('bank-info.destroy', $d->id) }}" method="POST" class="inline">
+                                            <button @click="openEditModal({{ $d }})" class="m-2 px-4 py-2 bg-blue-600 text-white rounded-md">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+
+                                            <form x-data @submit.prevent="confirmDelete($event)" action="{{ route('bank-info.destroy', $d->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <x-danger-button type="submit" class="m-2"><i class="fa fa-trash-can"></i></x-danger-button>
@@ -57,16 +61,31 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         if (document.getElementById("search-table") && typeof simpleDatatables.DataTable !== 'undefined') {
-        const dataTable = new simpleDatatables.DataTable("#search-table", {
-            searchable: true,
-            sortable: false
-        });
-    }
-
+            const dataTable = new simpleDatatables.DataTable("#search-table", {
+                searchable: true,
+                sortable: false
+            });
+        }
     });
 
 
     function confirmSubmission(event) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to submit this form?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, submit it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.submit();
+            }
+        });
+    }
+
+    function confirmDelete(event) {
         Swal.fire({
             title: 'Are you sure?',
             text: "Do you want to delete this item?",
@@ -80,6 +99,13 @@
                 event.target.submit();
             }
         });
+    }
+
+    function openEditModal(bankInfo) {
+        console.log(bankInfo);
+        const modal = document.querySelector('[x-data="{ bankInfo: {} }"]');
+        modal.__x.$data.bankInfo = bankInfo;
+        modal.__x.$dispatch('open-modal', 'editBankInfo');
     }
 </script>
 </x-app-layout>

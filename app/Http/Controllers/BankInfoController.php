@@ -44,6 +44,33 @@ class BankInfoController extends Controller
         }
     }
 
+    public function update(Request $request, BankInfo $bankInfo)
+    {
+        $data = $request->validate([
+            'client_id' => 'required|string',
+            'client_secret' => 'required|string',
+            'rsa_public_key' => 'required|string',
+            'partner_id' => 'required|string',
+        ]);
+
+        $data['channel_id'] = 'BAPE';
+
+        try {
+            DB::beginTransaction();
+
+            $bankInfo->update($data);
+
+            DB::commit();
+
+            return redirect()->route('bank-info')->with('success', 'Bank info has been updated');
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+
+            return redirect()->route('bank-info')->with('error', 'Bank info failed to update '. $th->getMessage());
+        }
+    }
+
     public function destroy(BankInfo $bankInfo)
     {
         try {
