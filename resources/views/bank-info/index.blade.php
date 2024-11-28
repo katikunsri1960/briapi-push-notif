@@ -39,7 +39,6 @@
                                             <button @click="openEditModal({{ $d }})" class="m-2 px-4 py-2 bg-blue-600 text-white rounded-md">
                                                 <i class="fa fa-pencil"></i>
                                             </button>
-
                                             <form x-data @submit.prevent="confirmDelete($event)" action="{{ route('bank-info.destroy', $d->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
@@ -57,55 +56,57 @@
         </div>
     </div>
 
-<script>
+    <script>
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     if (document.getElementById("search-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+        //         const dataTable = new simpleDatatables.DataTable("#search-table", {
+        //             searchable: true,
+        //             sortable: false
+        //         });
+        //     }
+        // });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        if (document.getElementById("search-table") && typeof simpleDatatables.DataTable !== 'undefined') {
-            const dataTable = new simpleDatatables.DataTable("#search-table", {
-                searchable: true,
-                sortable: false
+        function confirmSubmission(event) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to submit this form?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
             });
         }
-    });
 
+        function confirmDelete(event) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to delete this item?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
+            });
+        }
 
-    function confirmSubmission(event) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "Do you want to submit this form?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, submit it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                event.target.submit();
+        function openEditModal(bankInfo) {
+            console.log(bankInfo);
+            const modal = document.querySelector('[x-data="{ bankInfo: {} }"]');
+            if (modal) {
+                modal.__x.$data.bankInfo = bankInfo;
+                modal.__x.$dispatch('open-modal', 'editBankInfo');
+            } else {
+                console.error('Modal not found');
             }
-        });
-    }
-
-    function confirmDelete(event) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "Do you want to delete this item?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                event.target.submit();
-            }
-        });
-    }
-
-    function openEditModal(bankInfo) {
-        console.log(bankInfo);
-        const modal = document.querySelector('[x-data="{ bankInfo: {} }"]');
-        modal.__x.$data.bankInfo = bankInfo;
-        modal.__x.$dispatch('open-modal', 'editBankInfo');
-    }
-</script>
+        }
+    </script>
 </x-app-layout>
