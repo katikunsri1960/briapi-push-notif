@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('bank-info')->group(function(){
         Route::get('/', [BankInfoController::class, 'index'])->name('bank-info');
+        Route::post('/', [BankInfoController::class, 'store'])->name('bank-info.store');
     });
 
     Route::prefix('tagihan')->group(function(){
