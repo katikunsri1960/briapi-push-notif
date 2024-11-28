@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('setting_parameters', function (Blueprint $table) {
             $table->id();
+            $table->boolean('va_created')->default('0');
             $table->string('nama_bank');
             $table->string('kode_bank');
-            $table->string('client_key');
-            $table->string('partner_id');
-            $table->string('signature');
-            $table->string('partner_service_id');
+            $table->string('client_key'); //client id
+            $table->string('partner_service_id'); //Coorporate Code
+            $table->text('private_key'); //RSA Private Key
+            $table->text('token')->nullable;
             $table->timestamps();
         });
     }

@@ -33,18 +33,22 @@ class TagihanController extends Controller
 
     }
 
-    public function get_token_bri(){
+    public function get_token(Request $request){
 
-        $detail_bank = SettingParameter::where('kode_bank', 'BRI')->first();
-
+        $detail_bank = SettingParameter::where('kode_bank', $request->kode_bank)->first();
         $dateTime = new DateTime('now', new DateTimeZone('Asia/Jakarta')); // Set the desired timezone
-        $time_stamp = $dateTime->format('Y-m-d\TH:i:s.vP'); // `.v` includes milliseconds
+        $timestamp = $dateTime->format('Y-m-d\TH:i:s.vP'); // `.v` includes milliseconds
+
+        // Buat signature untuk validasi signature
+        $string_signature = $detail_bank->clientId . '|' . $timestamp;
+        $signature = 
+
 
         $client = new Client();
         $headers = [
-        'X-SIGNATURE' => '"'.$detail_bank->signature.'"',
-        'X-CLIENT-KEY' => '"'.$detail_bank->client_key.'"',
-        'X-TIMESTAMP' => '"'.$time_stamp.'"',
+        'X-SIGNATURE' => '"'.$signature.'"',
+        'X-CLIENT-KEY' => '"'.$detail_bank->client_id.'"',
+        'X-TIMESTAMP' => '"'.$timestamp.'"',
         'Content-Type' => 'application/json'
         ];
         $body = '{
@@ -67,7 +71,7 @@ class TagihanController extends Controller
         $client = new Client();
         $headers = [
         'CHANNEL-ID' => 'BAPE',
-        'X-SIGNATURE' => '"'.$detail_bank->signature.'"',
+        'X-SIGNATURE' => '"'.$signature.'"',
         'X-TIMESTAMP' => '"'.$time_stamp.'"',
         'X-PARTNER-ID' => 'unsri',
         'Content-Type' => 'application/json',

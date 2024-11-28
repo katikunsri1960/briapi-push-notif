@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tagihan_va_unsris', function (Blueprint $table) {
             $table->id();
+            $table->string('customer_number');
             $table->string('nim');
             $table->string('nama_mahasiswa');
             $table->string('id_fakultas');
@@ -23,7 +24,7 @@ return new class extends Migration
             $table->string('id_periode_masuk');
             $table->string('tipe_ukt')->nullable();
             $table->string('tagihan');
-            $table->string('customer_number');
+            $table->boolean('status_tagihan')->default('0');
             $table->date('tanggal_mulai_berlaku');
             $table->date('tanggal_akhir_berlaku');
             $table->string('id_semester');
