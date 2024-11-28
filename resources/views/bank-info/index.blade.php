@@ -10,11 +10,11 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="w-full my-2">
-                       <x-button-modal modalName='addBankInfo'>Add Bank Info</x-button-modal>
+                        <x-button-modal modalName='addBankInfo'>Add Bank Info</x-button-modal>
                     </div>
                     @include('bank-info.create')
                     <div class="relative overflow-x-auto mt-6">
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="table-data">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="search-table">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">PARTNER ID</th>
@@ -47,36 +47,39 @@
                                 @endforeach
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-</x-app-layout>
-@push('js')
 <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById("search-table") && typeof simpleDatatables.DataTable !== 'undefined') {
+        const dataTable = new simpleDatatables.DataTable("#search-table", {
+            searchable: true,
+            sortable: false
+        });
+    }
+
+    });
+
 
     function confirmSubmission(event) {
         Swal.fire({
             title: 'Are you sure?',
-            text: "Do you want to delete this data?",
+            text: "Do you want to delete this item?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!'
+            confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
                 event.target.submit();
             }
         });
     }
-
-
-
-
 </script>
-
-@endpush
+</x-app-layout>
