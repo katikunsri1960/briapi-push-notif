@@ -5,17 +5,23 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div id="alertBox" class="pt-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
+                <div class="p-6 text-gray-900 dark:text-gray-100 flex justify-between items-center">
+                    <span>{{ __("You're logged in!") }}</span>
+                    <button 
+                        onclick="closeAlert()" 
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                    >
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div>
+    <div class="pt-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -23,7 +29,7 @@
                         <h1 class="text-3xl">Setting Parameter WS</h1>
                     </div>
                     <div class="w-full my-3 text-end">
-                        <a class="bg-blue-600 hover:bg-blue-900 text-white font-bold py-2 px-4 border border-blue-700 rounded"> + | Tambah Bank</a>
+                        <a class="bg-blue-600 hover:bg-blue-900 text-white font-bold py-2 px-4 border border-blue-700 rounded" href="{{route('dashboard.tambah-bank')}}"> + | Tambah Bank</a>
                     </div>
 
                     <div class="relative overflow-x-auto mt-6">
@@ -48,9 +54,6 @@
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         RSA PRIVATE KEY
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        TOKEN
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         ACTION
@@ -83,9 +86,6 @@
                                         {{$d->private_key}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{$d->token}}
-                                    </td>
-                                    <td class="px-6 py-4">
                                         
                                     </td>
                                 </tr>
@@ -98,3 +98,9 @@
         </div>
     </div>
 </x-app-layout>
+<script>
+    function closeAlert() {
+        const alertBox = document.getElementById('alertBox');
+        alertBox.style.display = 'none';
+    }
+</script>
