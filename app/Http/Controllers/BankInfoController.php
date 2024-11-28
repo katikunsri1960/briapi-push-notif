@@ -26,6 +26,8 @@ class BankInfoController extends Controller
             'partner_id' => 'required|string',
         ]);
 
+        $data['channel_id'] = 'BAPE';
+
         try {
             DB::beginTransaction();
 
@@ -39,6 +41,24 @@ class BankInfoController extends Controller
             DB::rollBack();
 
             return redirect()->route('bank-info')->with('error', 'Bank info failed to save '. $th->getMessage());
+        }
+    }
+
+    public function destroy(BankInfo $bankInfo)
+    {
+        try {
+            DB::beginTransaction();
+
+            $bankInfo->delete();
+
+            DB::commit();
+
+            return redirect()->route('bank-info')->with('success', 'Bank info has been deleted');
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+
+            return redirect()->route('bank-info')->with('error', 'Bank info failed to delete '. $th->getMessage());
         }
     }
 }

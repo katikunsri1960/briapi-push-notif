@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('bank-info')->group(function(){
         Route::get('/', [BankInfoController::class, 'index'])->name('bank-info');
         Route::post('/', [BankInfoController::class, 'store'])->name('bank-info.store');
+        Route::delete('/{bankInfo}', [BankInfoController::class, 'destroy'])->name('bank-info.destroy');
     });
 
     Route::prefix('tagihan')->group(function(){

@@ -34,7 +34,8 @@
                                     <td class="px-6 py-4">{{ $d->client_secret }}</td>
                                     <td class="px-6 py-4">{{ Str::substr($d->rsa_public_key, 0, 64) }} ........</td>
                                     <td class="px-6 py-4">
-                                        <x-primary-button>Edit</x-primary-button>
+                                        <x-primary-button class="m-2">Edit</x-primary-button>
+                                        <x-danger-button class="m-2"><i class="fa fa-trash-can"></i></x-danger-button>
                                     </td>
                                 </tr>
                                 @endforeach
