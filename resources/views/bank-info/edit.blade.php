@@ -8,7 +8,7 @@
         <div class="my-3">
             <form x-data="{ bankInfo: {} }" @submit.prevent="submitEditForm" action="{{ route('bank-info.update', '') }}" method="POST">
                 @csrf
-                @method('PATCH')
+                @method('PUT')
                 <input type="hidden" name="id" x-model="bankInfo.id">
                 <div class="mb-3">
                     <x-input-label for="edit_partner_id" :value="__('PARTNER ID')" />
