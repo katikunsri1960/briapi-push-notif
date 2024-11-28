@@ -18,9 +18,10 @@ class TagihanVAUnsri extends Model
 
             foreach ($data as $item) {
 
-                $customer_number = generate_customer_number($item->nim, 5);
+                $customer_number = generate_customer_number($item->nim, 14);
 
                 $this->create([
+                    'customer_number' => $customer_number,
                     'nim' => $item->nomor_pembayaran,
                     'nama_mahasiswa' => $item->nama,
                     'id_fakultas' => $item->kode_fakultas,
@@ -31,7 +32,7 @@ class TagihanVAUnsri extends Model
                     'id_periode_masuk' => $item->angkatan,
                     'tipe_ukt' => 0,
                     'tagihan' => $item->total_nilai_tagihan,
-                    'customer_number' => $customer_number,
+                    'status_tagihan' => 0,
                     'tanggal_mulai_berlaku' => $waktu_berlaku,
                     'tanggal_akhir_berlaku' => $waktu_berakhir,
                     'id_semester' => $item->kode_periode,
