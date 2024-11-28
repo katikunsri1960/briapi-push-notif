@@ -9,10 +9,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="w-full my-9">
-                        <x-link-button >
-                            Tarik Data Tagihan
-                        </x-link-button>
+                    <div class="w-full my-3">
+                        <a class="bg-blue-600 hover:bg-blue-900 text-white font-bold py-2 px-4 border border-blue-700 rounded" href="route('tagihan.get-tagihan', )">Tarik Data Tagihan</a>
                     </div>
 
                     <div class="relative overflow-x-auto mt-6">
