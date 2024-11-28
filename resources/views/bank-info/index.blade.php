@@ -14,7 +14,7 @@
                     </div>
                     @include('bank-info.create')
                     <div class="relative overflow-x-auto mt-6">
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="table-data">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">PARTNER ID</th>
@@ -34,16 +34,49 @@
                                     <td class="px-6 py-4">{{ $d->client_secret }}</td>
                                     <td class="px-6 py-4">{{ Str::substr($d->rsa_public_key, 0, 64) }} ........</td>
                                     <td class="px-6 py-4">
-                                        <x-primary-button class="m-2">Edit</x-primary-button>
-                                        <x-danger-button class="m-2"><i class="fa fa-trash-can"></i></x-danger-button>
+                                        <div class="inline-flex">
+                                            <x-primary-button class="m-2"><i class="fa fa-pencil"></i></x-primary-button>
+                                            <form x-data @submit.prevent="confirmSubmission($event)" action="{{ route('bank-info.destroy', $d->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <x-danger-button type="submit" class="m-2"><i class="fa fa-trash-can"></i></x-danger-button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </x-app-layout>
+@push('js')
+<script>
+
+    function confirmSubmission(event) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to delete this data?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.submit();
+            }
+        });
+    }
+
+
+
+
+</script>
+
+@endpush

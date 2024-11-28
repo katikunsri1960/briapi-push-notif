@@ -11,6 +11,11 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="{{asset('assets/icons/font-awesome/css/all.css')}}">
+        <link rel="stylesheet" href="{{asset('assets/css/datatable-tailwind.css')}}">
+        <script src="{{asset('assets/js/jquery.js')}}"></script>
+        <script src="{{asset('/assets/js/jquery.dataTables.js')}}"></script>
+        <script src="{{asset('assets/js/dataTables.tailwindcss.js')}}"></script>
         <!-- Scripts -->
 
         @stack('css')
@@ -34,6 +39,7 @@
                 {{ $slot }}
             </main>
         </div>
+
 
 
 
