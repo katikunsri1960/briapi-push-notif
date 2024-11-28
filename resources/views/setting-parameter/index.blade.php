@@ -1,8 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Tambah Data Bank Virtual Account
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                Tambah Data Bank Virtual Account
+            </h2>
+            <a class="flex-shrink-0 bg-yellow-500 hover:bg-yellow-700 border-yellow-500 text-white text-sm py-1 px-2 rounded" 
+            type="button" 
+            href="{{ route('dashboard') }}">
+                Kembali
+            </a>
+        </div>
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -54,13 +61,13 @@
                                     <p class="text-white-600 text-xs italic">* Notes : Pastikan Data Yang di Masukkan Benar.</p>
                                 </div>
                             </div>
-                            <div class="flex items-right py-2">
+                            <div class="flex py-2">
                                 <button class="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded" type="submit">
                                 Save
                                 </button>
-                                <button class="flex-shrink-0 border-transparent border-4 text-white-500 hover:text-blue-500 text-sm py-1 px-2 rounded" type="button">
+                                <a class="flex-shrink-0 border-transparent border-4 text-white-500 hover:text-blue-500 text-sm py-1 px-2 rounded" type="button" href="{{route('dashboard')}}">
                                 Cancel
-                                </button>
+                                </a>
                             </div>
                         </form>
                     </div>

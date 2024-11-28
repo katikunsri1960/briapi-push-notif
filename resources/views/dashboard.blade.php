@@ -29,7 +29,7 @@
                         <h1 class="text-3xl">Setting Parameter WS</h1>
                     </div>
                     <div class="w-full my-3 text-end">
-                        <a class="bg-blue-600 hover:bg-blue-900 text-white font-bold py-2 px-4 border border-blue-700 rounded" href="{{route('dashboard.tambah-bank')}}"> + | Tambah Bank</a>
+                        <a class="bg-blue-600 hover:bg-blue-900 text-white font-bold py-2 px-4 border border-blue-700 rounded" type="button" href="{{route('dashboard.tambah-bank')}}"> + | Tambah Bank</a>
                     </div>
 
                     <div class="relative overflow-x-auto mt-6">
@@ -39,6 +39,9 @@
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         NO
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        ACTION
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         KODE BANK
@@ -55,9 +58,6 @@
                                     <th scope="col" class="px-6 py-3">
                                         RSA PRIVATE KEY
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        ACTION
-                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,10 +66,13 @@
                                 @endphp
                                 @foreach ($data as $d)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row"
+                                    <td scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{$row = $row+1}}
-                                    </th>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        
+                                    </td>
                                     <td class="px-6 py-4">
                                         {{$d->kode_bank}}
                                     </td>
@@ -84,9 +87,6 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         {{$d->private_key}}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        
                                     </td>
                                 </tr>
                                 @endforeach

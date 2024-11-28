@@ -13,9 +13,8 @@ class TagihanController extends Controller
     public function index(){
 
         try {
-            // Fetch semesters grouped by `kode_periode`
-            $semester = Tagihan::orderBy('kode_periode', 'desc')
-                ->first();
+            // Fetch semesters order by `kode_periode`
+            $semester = Tagihan::orderBy('kode_periode', 'desc')->first();
 
         } catch (\Exception $e) {
             // Return error if database connection fails
