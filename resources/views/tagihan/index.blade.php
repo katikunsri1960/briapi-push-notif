@@ -49,14 +49,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $row = 0;
-                                @endphp
-                                @foreach ($data as $d)
+                                @foreach ($data as $key => $d)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center">
-                                        {{$row = $row+1}}
+                                        {{ $data->firstItem() + $key }}
                                     </th>
                                     <td class="px-6 py-4 text-center">
                                         {{$d->nim}}
@@ -84,6 +81,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="my-5">
+                            {{ $data->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

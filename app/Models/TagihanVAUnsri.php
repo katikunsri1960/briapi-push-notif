@@ -13,7 +13,7 @@ class TagihanVAUnsri extends Model
 
     public function get_data_tagihan_mahasiswa($semester)
     {
-        ini_set('max_execution_time', 60);
+        ini_set('max_execution_time', 180);
         
         try {
             // Fetch active Tagihan data for the specified semester
@@ -57,7 +57,7 @@ class TagihanVAUnsri extends Model
                 ];
 
                 // Use updateOrCreate for create or update
-                $this->updateOrCreate(['customer_number' => $customer_number, 'kode_periode' => $semester], $updateData);
+                $this->updateOrCreate(['customer_number' => $customer_number, 'id_semester' => $semester], $updateData);
             }
 
             // Commit transaction

@@ -30,7 +30,7 @@ class TagihanController extends Controller
         }
         
         // Fetch data for TagihanVAUnsri based on semesters
-        $data = TagihanVAUnsri::where('id_semester', $semester->kode_periode)->get();
+        $data = TagihanVAUnsri::where('id_semester', $semester->kode_periode)->paginate(20)->withQueryString();
         
         // Return view with the fetched data
         return view('tagihan.index', [

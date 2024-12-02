@@ -58,6 +58,22 @@
                                         RSA Private Key
                                     </label>
                                     <textarea class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-private-key" name="private_key" type="textbox" placeholder="Masukkan RSA Private Key"></textarea>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap -mx-3 mb-6">
+                                <div class="w-full px-3">
+                                    <label class="block uppercase tracking-wide text-white-700 text-xs font-bold mb-2" for="grid-url-sandbox">
+                                        URL Sandbox
+                                    </label>
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-url-sandbox" name="url_sandbox" type="text" placeholder="Masukkan URL Sandbox">
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap -mx-3 mb-6">
+                                <div class="w-full px-3">
+                                    <label class="block uppercase tracking-wide text-white-700 text-xs font-bold mb-2" for="grid-url-production">
+                                        URL Production
+                                    </label>
+                                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-url-production" name="url_production" type="text" placeholder="Masukkan URL Production">
                                     <p class="text-white-600 text-xs italic">* Notes : Pastikan Data Yang di Masukkan Benar.</p>
                                 </div>
                             </div>
