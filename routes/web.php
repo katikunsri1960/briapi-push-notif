@@ -10,6 +10,11 @@ Route::get('/', function () {
 
 Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/tambah-bank', [\App\Http\Controllers\DashboardController::class, 'tambah_bank'])->name('dashboard.tambah-bank');
+    Route::post('/tambah-bank/store', [\App\Http\Controllers\DashboardController::class, 'store_bank'])->name('dashboard.tambah-bank.store');
+    Route::get('/get-token', [\App\Http\Controllers\DashboardController::class, 'get_token'])->name('dashboard.get-token');
+    Route::post('/get-token/store', [\App\Http\Controllers\DashboardController::class, 'store_get_token'])->name('dashboard.get-token.store');
+    Route::get('/create-va/{id_bank}', [\App\Http\Controllers\DashboardController::class, 'create_va'])->name('dashboard.create-va');
 });
 
 Route::middleware('auth')->group(function () {
@@ -27,7 +32,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('tagihan')->group(function(){
         Route::get('/', [App\Http\Controllers\Tagihan\TagihanController::class, 'index'])->name('tagihan');
-        Route::get('/get-tagihan', [App\Http\Controllers\Tagihan\TagihanController::class, 'get_tagihan_unsri'])->name('tagihan.get-tagihan');
+        Route::get('/get-tagihan/{semester}', [App\Http\Controllers\Tagihan\TagihanController::class, 'get_tagihan_unsri'])->name('tagihan.get-tagihan');
     });
 });
 
