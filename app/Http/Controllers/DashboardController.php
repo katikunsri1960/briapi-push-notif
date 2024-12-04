@@ -187,6 +187,12 @@ class DashboardController extends Controller
                 } catch (\Exception $e) {
                     // Log the error for this particular record
                     \Log::error('Error creating VA for customer: ' . $d->customer_number . ' - ' . $e->getMessage());
+
+                    // Return error if database connection fails
+                    return [
+                        'status' => 'error',
+                        'message' => 'Terjadi kesalahan!'. $e->getMessage(),
+                    ];
                 }
 
             }
@@ -202,6 +208,7 @@ class DashboardController extends Controller
     public function api_create_va_bri($id_bank, $customer_number, $nama_mahasiswa, $tagihan, $tgl_akhir, $semester)
     {
         $detail_bank = SettingParameter::where('id', $id_bank)->first();
+
         if (!$detail_bank) {
             return response()->json(['error' => 'Bank details not found'], 404);
         }
@@ -210,21 +217,30 @@ class DashboardController extends Controller
         $dateTime = new DateTime('now', new DateTimeZone('Asia/Jakarta'));
         $timestamp = $dateTime->format('Y-m-d\TH:i:s.vP');
 
-        // Generate virtual account number
-        $va_number = $detail_bank->partner_service_id . $customer_number;
+        $tgl_akhir = "2024-12-30";
+
+        // Append time to make it a complete date-time
+        $dateTime = new DateTime($tgl_akhir . ' 23:59:59', new DateTimeZone('Asia/Jakarta'));
+        $tgl_akhir_iso = $dateTime->format('Y-m-d\TH:i:sP'); // ISO 8601 format
+
+        // dd($tgl_akhir_iso);
+
+        // Generate partner service ID and virtual account number
+        $partner_service_id = "   " . $detail_bank->partner_service_id; // Remove extra spaces
+        $va_number = $partner_service_id . $customer_number;
 
         // Prepare request body
         $requestBody = [
-            "partnerServiceId" => $detail_bank->partner_service_id,
-            "customerNo" => $customer_number,
+            "partnerServiceId" => $partner_service_id,
+            "customerNo" => trim($customer_number),
             "virtualAccountNo" => $va_number,
-            "virtualAccountName" => $nama_mahasiswa,
+            "virtualAccountName" => trim($nama_mahasiswa),
             "totalAmount" => [
-                "value" => $tagihan,
+                "value" => number_format((float)$tagihan, 2, '.', ''), // Ensure it is a float, no extra formatting
                 "currency" => "IDR",
             ],
-            "expiredDate" => $tgl_akhir,
-            "trxId" => $semester,
+            "expiredDate" => $tgl_akhir_iso, // Ensure it's in ISO 8601 format
+            "trxId" => trim($semester),
             "additionalInfo" => [
                 "description" => "UKT UNSRI",
             ],
@@ -240,11 +256,12 @@ class DashboardController extends Controller
         $payload = "{$httpMethod}:{$requestPath}:{$detail_bank->token}:{$hash}:{$timestamp}";
 
         // Generate HMAC-SHA512 signature
-        $clientSecret = $detail_bank->client_secret; // Ensure this is set in your database
+        $clientSecret = $detail_bank->client_secret;
         $hmacSignature = hash_hmac('sha512', $payload, $clientSecret);
 
         // Prepare headers
         $headers = [
+            'X-EXTERNAL-ID' => rand(100000000, 999999999),
             'CHANNEL-ID' => 'BAPE',
             'X-SIGNATURE' => $hmacSignature,
             'X-TIMESTAMP' => $timestamp,
@@ -255,17 +272,25 @@ class DashboardController extends Controller
 
         // Send the request
         $client = new \GuzzleHttp\Client();
+
         try {
             $response = $client->post($detail_bank->url_api_sandbox . $requestPath, [
                 'headers' => $headers,
-                'body' => $requestBodyJson,
+                'body' => $requestBodyJson, // Use 'json' instead of 'body' for JSON payload
             ]);
-            // dd(json_decode($response->getBody()));
+
+            // Log response
+            Log::info('Response Body: ' . (string) $response->getBody());
 
             return ['data' => json_decode($response->getBody(), true)];
-        } catch (\Exception $e) {
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            // Log detailed error response
+            if ($e->hasResponse()) {
+                Log::error('API Response Error: ' . (string) $e->getResponse()->getBody());
+            }
             Log::error('VA Creation Error: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to create virtual account'], 500);
         }
     }
+
 }
