@@ -142,7 +142,8 @@ class AccessTokenController extends Controller
         if (!$bankInfo) {
             return response()->json([
                 "responseCode" => "4017300",
-                "responseMessage" => "Unauthorized. stringToSign"
+                "responseMessage" => "Unauthorized. stringToSign",
+                'partnerId' => $partnerId
             ], 401);
         }
 
