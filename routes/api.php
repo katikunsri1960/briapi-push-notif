@@ -10,5 +10,6 @@ Route::get('/user', function (Request $request) {
 
 
 Route::post('/access-token/b2b', [AccessTokenController::class, 'getToken']);
+Route::post('/transfer-va/notify-payment-intrabank', [AccessTokenController::class, 'notifyPaymentIntrabank']);
 
 

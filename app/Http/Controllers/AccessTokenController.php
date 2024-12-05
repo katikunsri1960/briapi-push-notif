@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AccessToken;
 use App\Models\BankInfo;
+use App\Models\PaymentNotifications;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -24,7 +25,10 @@ class AccessTokenController extends Controller
 
         // Validasi format timestamp (ISO 8601)
         if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
-            return response()->json(['message' => 'invalidTimestampFormat'], 400);
+            return response()->json([
+                'responseCode' => '4003402',
+                'responseMessage' => 'invalidTimestampFormat'
+            ], 400);
         }
 
         // Cari bank info berdasarkan Client ID
@@ -88,6 +92,102 @@ class AccessTokenController extends Controller
             'accessToken' => $accessToken,
             'tokenType' => 'BearerToken',
             'expiresIn' => 899, // 15 menit dalam detik (899 detik sesuai SNAP BI)
+        ], 200);
+    }
+
+    public function notifyPaymentIntrabank(Request $request)
+    {
+        // Ambil header
+        $authorization = $request->header('Authorization');
+        $timestamp = $request->header('X-TIMESTAMP');
+        $signature = $request->header('X-SIGNATURE');
+        $contentType = $request->header('Content-Type');
+        $partnerId = $request->header('X-PARTNER-ID');
+        $channelId = $request->header('CHANNEL-ID');
+        $externalId = $request->header('X-EXTERNAL-ID');
+
+        // Validasi keberadaan header
+        if (!$authorization || !$timestamp || !$signature || !$contentType || !$partnerId || !$channelId || !$externalId) {
+            return response()->json([
+                'responseCode' => '4003402',
+                'responseMessage' => 'missingRequiredHeaders'
+            ], 400);
+        }
+
+        // Validasi format timestamp (ISO 8601)
+        if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
+            return response()->json([
+                'responseCode' => '4003402',
+                'responseMessage' => 'invalidTimestampFormat'
+            ], 400);
+        }
+
+        // Validasi Content-Type
+        if ($contentType !== 'application/json') {
+            return response()->json([
+                'responseCode' => '4003401',
+                'responseMessage' => 'Invalid Field Format. invalid (ContentType)'
+            ], 400);
+        }
+
+        // Ambil token dari header Authorization
+        if (!preg_match('/Bearer\s(\S+)/', $authorization, $matches)) {
+            return response()->json(['message' => 'invalidAuthorizationFormat'], 400);
+        }
+        $accessToken = $matches[1];
+
+        // Cari bank info berdasarkan Partner ID
+        $bankInfo = BankInfo::where('partner_id', $partnerId)->first();
+        if (!$bankInfo) {
+            return response()->json([
+                "responseCode" => "4017300",
+                "responseMessage" => "Unauthorized. stringToSign"
+            ], 401);
+        }
+
+        // Validasi Access Token
+        $token = AccessToken::where('access_token', $accessToken)
+            ->where('bank_info_id', $bankInfo->id)
+            ->where('expires_at', '>', now())
+            ->first();
+        if (!$token) {
+            return response()->json([
+                "responseCode" => "4017300",
+                "responseMessage" => "Unauthorized. stringToSign"
+            ], 401);
+        }
+
+        // Cek validitas timestamp (maksimal perbedaan 5 menit)
+        $requestTime = Carbon::parse($timestamp);
+        $currentTime = now();
+        if ($currentTime->diffInSeconds($requestTime) > 300) { // 5 menit
+            return response()->json([
+                "responseCode" => "4037300",
+                "responseMessage" => "timestampExpired"
+            ], 403);
+        }
+
+        // Buat payload untuk validasi signature
+        $payload = $timestamp . '.' . json_encode($request->all());
+
+        // Validasi Signature HMAC_SHA512
+        $calculatedSignature = hash_hmac('sha512', $payload, $bankInfo->client_secret);
+        if ($signature !== $calculatedSignature) {
+            return response()->json([
+                "responseCode" => "4017300",
+                "responseMessage" => "Unauthorized. stringToSign"
+            ], 401);
+        }
+
+        // Proses notifikasi pembayaran
+        // Simpan data notifikasi ke database atau lakukan tindakan lain yang diperlukan
+        // Contoh: PaymentNotification::create($request->all());
+        PaymentNotifications::createNotification($request->all());
+
+        // Response sesuai standar SNAP BI
+        return response()->json([
+            'responseCode' => '2003400',
+            'responseMessage' => 'Successful'
         ], 200);
     }
 }
