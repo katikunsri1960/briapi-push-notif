@@ -192,7 +192,9 @@ class AccessTokenController extends Controller
 
         // Proses notifikasi pembayaran
         // Simpan data notifikasi ke database atau lakukan tindakan lain yang diperlukan
-        PaymentNotifications::createNotification($request->all());
+
+
+        // PaymentNotifications::createNotification($request->all());
 
         // Response sesuai standar SNAP BI
         return response()->json([
