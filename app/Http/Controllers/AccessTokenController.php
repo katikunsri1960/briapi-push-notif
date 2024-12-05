@@ -139,10 +139,11 @@ class AccessTokenController extends Controller
 
         // Cari bank info berdasarkan Partner ID
         $bankInfo = BankInfo::where('partner_id', $partnerId)->first();
+
         if (!$bankInfo) {
             return response()->json([
-                "responseCode" => "4017300",
-                "responseMessage" => "Unauthorized. stringToSign",
+                "responseCode" => "4042716",
+                "responseMessage" => "Partner not found",
                 'partnerId' => $partnerId
             ], 401);
         }
@@ -185,6 +186,7 @@ class AccessTokenController extends Controller
                 "responseCode" => "4017300",
                 "responseMessage" => "Unauthorized. stringToSign",
                 'signature' => $signature,
+                'payload' => $payload,
             ], 401);
         }
 
