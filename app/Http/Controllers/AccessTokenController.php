@@ -162,6 +162,15 @@ class AccessTokenController extends Controller
             ], 401);
         }
 
+        // cek apakah token sudah expired
+        if ($token->expires_at < now()) {
+            return response()->json([
+                "responseCode" => "4012701",
+                "responseMessage" => "Invalid Token (B2B)",
+                // 'accessToken' => $accessToken
+            ], 401);
+        }
+
         // Cek validitas timestamp (maksimal perbedaan 5 menit)
         $requestTime = Carbon::parse($timestamp);
         $currentTime = now();
