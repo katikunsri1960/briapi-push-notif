@@ -150,14 +150,14 @@ class AccessTokenController extends Controller
         // Validasi Access Token
         $token = AccessToken::where('access_token', $accessToken)
             ->where('bank_info_id', $bankInfo->id)
-            ->where('expires_at', '>', now())
+            // ->where('expires_at', '>', now())
             ->first();
 
         if (!$token) {
             return response()->json([
-                "responseCode" => "4017300",
-                "responseMessage" => "Unauthorized. stringToSign",
-                'accessToken' => $accessToken
+                "responseCode" => "4012701",
+                "responseMessage" => "Invalid Token (B2B)",
+                // 'accessToken' => $accessToken
             ], 401);
         }
 
