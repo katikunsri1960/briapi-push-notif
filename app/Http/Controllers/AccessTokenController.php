@@ -114,7 +114,7 @@ class AccessTokenController extends Controller
             ], 400);
         }
 
-        // Validasi format timestamp (ISO 8601)
+        // Validasi format timestamp (ISO 8601 dengan milidetik)
         if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
             return response()->json([
                 'responseCode' => '4003402',
@@ -172,7 +172,11 @@ class AccessTokenController extends Controller
         }
 
         // Buat payload untuk validasi signature
-        $payload = $timestamp . '.' . json_encode($request->all());
+        $httpMethod = $request->method();
+        $requestPath = $request->path();
+        $requestBody = json_encode($request->all());
+        $hash = hash('sha256', $requestBody);
+        $payload = $httpMethod . ':' . $requestPath . ':' . $accessToken . ':' . $hash . ':' . $timestamp;
 
         // Validasi Signature HMAC_SHA512
         $calculatedSignature = hash_hmac('sha512', $payload, $bankInfo->client_secret);
@@ -186,7 +190,6 @@ class AccessTokenController extends Controller
 
         // Proses notifikasi pembayaran
         // Simpan data notifikasi ke database atau lakukan tindakan lain yang diperlukan
-        // Contoh: PaymentNotification::create($request->all());
         PaymentNotifications::createNotification($request->all());
 
         // Response sesuai standar SNAP BI
