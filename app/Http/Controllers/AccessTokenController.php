@@ -27,7 +27,8 @@ class AccessTokenController extends Controller
         if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
             return response()->json([
                 'responseCode' => '4003402',
-                'responseMessage' => 'invalidTimestampFormat'
+                'responseMessage' => 'invalidTimestampFormat',
+                'timestamp' => $timestamp
             ], 400);
         }
 
