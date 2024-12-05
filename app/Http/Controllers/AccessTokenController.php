@@ -24,12 +24,12 @@ class AccessTokenController extends Controller
         }
 
         // Validasi format timestamp (ISO 8601)
-        if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
-            return response()->json([
-                'responseCode' => '4003402',
-                'responseMessage' => 'invalidTimestampFormat',
-            ], 400);
-        }
+        // if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
+        //     return response()->json([
+        //         'responseCode' => '4003402',
+        //         'responseMessage' => 'invalidTimestampFormat',
+        //     ], 400);
+        // }
 
         // Cari bank info berdasarkan Client ID
         $bankInfo = BankInfo::where('client_id', $clientId)->first();
@@ -142,9 +142,8 @@ class AccessTokenController extends Controller
 
         if (!$bankInfo) {
             return response()->json([
-                "responseCode" => "4042716",
+                "responseCode" => "4043416",
                 "responseMessage" => "Partner not found",
-                'partnerId' => $partnerId
             ], 401);
         }
 
@@ -192,24 +191,29 @@ class AccessTokenController extends Controller
         $calculatedSignature = hash_hmac('sha512', $payload, $bankInfo->client_secret);
         if ($signature !== $calculatedSignature) {
             return response()->json([
-                "responseCode" => "4017300",
-                "responseMessage" => "Unauthorized. stringToSign",
-                'signature' => $signature,
-                'payload' => $payload,
+                "responseCode" => "4013401",
+                "responseMessage" => "Unauthorized. Verify Client Secret Fail.",
             ], 401);
         }
 
         // Proses notifikasi pembayaran
         // Simpan data notifikasi ke database atau lakukan tindakan lain yang diperlukan
-        $notification = $request->all();
+        // $notification = $request->all();
 
-        // PaymentNotifications::createNotification($request->all());
+        $notification = PaymentNotifications::createNotification($request->all());
 
         // Response sesuai standar SNAP BI
         return response()->json([
             'responseCode' => '2003400',
             'responseMessage' => 'Successful',
-            'virtualAccountData' => $notification
+            'virtualAccountData' => [
+                'partnerServiceId' => $notification->partner_service_id,
+                'customerNo' => $notification->customer_no,
+                'virtualAccountNo' => $notification->virtual_account_no,
+                'paymentRequestId' => $notification->payment_request_id,
+                'trxDateTime' => $notification->trx_date_time->toIso8601String(),
+                'paymentStatus' => 'Success',
+            ]
         ], 200);
     }
 }
