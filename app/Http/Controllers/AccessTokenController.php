@@ -177,7 +177,7 @@ class AccessTokenController extends Controller
         $requestPath = $request->path();
         $requestBody = json_encode($request->all());
         $hash = hash('sha256', $requestBody);
-        $payload = $httpMethod . ':' . $requestPath . ':' . $accessToken . ':' . $hash . ':' . $timestamp;
+        $payload = $httpMethod . ':/' . $requestPath . ':' . $accessToken . ':' . $hash . ':' . $timestamp;
 
         // Validasi Signature HMAC_SHA512
         $calculatedSignature = hash_hmac('sha512', $payload, $bankInfo->client_secret);
