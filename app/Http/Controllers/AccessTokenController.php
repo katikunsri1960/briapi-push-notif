@@ -152,10 +152,12 @@ class AccessTokenController extends Controller
             ->where('bank_info_id', $bankInfo->id)
             ->where('expires_at', '>', now())
             ->first();
+
         if (!$token) {
             return response()->json([
                 "responseCode" => "4017300",
-                "responseMessage" => "Unauthorized. stringToSign"
+                "responseMessage" => "Unauthorized. stringToSign",
+                'accessToken' => $accessToken
             ], 401);
         }
 
