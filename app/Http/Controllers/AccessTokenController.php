@@ -200,20 +200,13 @@ class AccessTokenController extends Controller
         // Simpan data notifikasi ke database atau lakukan tindakan lain yang diperlukan
         // $notification = $request->all();
 
-        $notification = PaymentNotifications::createNotification($request->all());
+        // $notification = PaymentNotifications::createNotification($request->all());
 
         // Response sesuai standar SNAP BI
         return response()->json([
             'responseCode' => '2003400',
             'responseMessage' => 'Successful',
-            'virtualAccountData' => [
-                'partnerServiceId' => $notification->partner_service_id,
-                'customerNo' => $notification->customer_no,
-                'virtualAccountNo' => $notification->virtual_account_no,
-                'paymentRequestId' => $notification->payment_request_id,
-                'trxDateTime' => $notification->trx_date_time->toIso8601String(),
-                'paymentStatus' => 'Success',
-            ]
+            'data' => $request->all(),
         ], 200);
     }
 }
