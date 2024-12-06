@@ -201,12 +201,19 @@ class AccessTokenController extends Controller
         // $notification = $request->all();
 
         // $notification = PaymentNotifications::createNotification($request->all());
-
+        $dataInsert = [
+            'partner_service_id' => $request->partnerServiceId,
+            'customer_no' => $request->customerNo,
+            'virtual_account_no' => $request->virtualAccountNo,
+            'payment_request_id' => $request->paymentRequestId,
+            'trx_date_time' => $request->trxDateTime,
+            'additional_info' => $request->additionalInfo,
+        ];
         // Response sesuai standar SNAP BI
         return response()->json([
             'responseCode' => '2003400',
             'responseMessage' => 'Successful',
-            'data' => $request->all(),
+            'data' => $dataInsert,
         ], 200);
     }
 }
