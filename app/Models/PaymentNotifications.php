@@ -16,12 +16,13 @@ class PaymentNotifications extends Model
     public static function createNotification($data)
     {
         return self::create([
-            'partner_service_id' => $data['partnerServiceId'],
-            'customer_no' => $data['customerNo'],
-            'virtual_account_no' => $data['virtualAccountNo'],
-            'payment_request_id' => $data['paymentRequestId'],
-            'trx_date_time' => $data['trxDateTime'],
-            'additional_info' => $data['additionalInfo'],
+            'bank_info_id' => $data['bank_info_id'],
+            'partner_service_id' => $data['partner_service_id'],
+            'customer_no' => $data['customer_no'],
+            'virtual_account_no' => $data['virtual_account_no'],
+            'payment_request_id' => $data['payment_request_id'],
+            'trx_date_time' => $data['trx_date_time'],
+            'additional_info' => $data['additional_info'],
         ]);
     }
 }

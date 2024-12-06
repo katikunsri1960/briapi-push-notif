@@ -210,14 +210,16 @@ class AccessTokenController extends Controller
             'trx_date_time' => $request->trxDateTime,
             'additional_info' => $request->additionalInfo,
         ];
+
         try {
-            $notification = PaymentNotifications::create($dataInsert);
+
+            $notification = PaymentNotifications::createNotification($dataInsert);
+            
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json([
                 'responseCode' => '5003400',
                 'responseMessage' => 'Internal Server Error. ' . $th->getMessage(),
-                'data' => $dataInsert,
             ], 500);
         }
 
