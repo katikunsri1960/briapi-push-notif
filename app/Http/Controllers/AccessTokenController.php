@@ -209,6 +209,7 @@ class AccessTokenController extends Controller
             'trx_date_time' => $request->trxDateTime,
             'additional_info' => $request->additionalInfo,
         ];
+        $notification = PaymentNotifications::create($dataInsert);
         // Response sesuai standar SNAP BI
         return response()->json([
             'responseCode' => '2003400',
