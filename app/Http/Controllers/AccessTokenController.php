@@ -20,14 +20,17 @@ class AccessTokenController extends Controller
 
         // Validasi keberadaan header
         if (!$clientId || !$signature || !$timestamp) {
-            return response()->json(['message' => 'missingRequiredHeaders'], 400);
+            return response()->json([
+                'responseCode' => '4003402',
+                'responseMessage' => 'Invalid Mandatory Field'],
+                400);
         }
 
         // Validasi format timestamp (ISO 8601)
         if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
             return response()->json([
-                'responseCode' => '4003402',
-                'responseMessage' => 'invalidTimestampFormat',
+                'responseCode' => '4003401',
+                'responseMessage' => 'Invalid Field Format. Invalid (X-TIMESTAMP)',
             ], 400);
         }
 
@@ -110,16 +113,16 @@ class AccessTokenController extends Controller
         if (!$authorization || !$timestamp || !$signature || !$contentType || !$partnerId || !$channelId || !$externalId) {
             return response()->json([
                 'responseCode' => '4003402',
-                'responseMessage' => 'missingRequiredHeaders'
+                'responseMessage' => 'Invalid Mandatory Field'
             ], 400);
         }
 
         // Validasi format timestamp (ISO 8601 dengan milidetik)
         if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
             return response()->json([
-                'responseCode' => '4003402',
-                'responseMessage' => 'invalidTimestampFormat',
-                'timestamp' => $timestamp
+                'responseCode' => '4003401',
+                'responseMessage' => 'Invalid Field Format. Invalid (X-TIMESTAMP)',
+                // 'timestamp' => $timestamp
             ], 400);
         }
 
@@ -214,7 +217,7 @@ class AccessTokenController extends Controller
         try {
 
             $notification = PaymentNotifications::createNotification($dataInsert);
-            
+
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json([
