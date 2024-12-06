@@ -24,12 +24,12 @@ class AccessTokenController extends Controller
         }
 
         // Validasi format timestamp (ISO 8601)
-        // if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
-        //     return response()->json([
-        //         'responseCode' => '4003402',
-        //         'responseMessage' => 'invalidTimestampFormat',
-        //     ], 400);
-        // }
+        if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
+            return response()->json([
+                'responseCode' => '4003402',
+                'responseMessage' => 'invalidTimestampFormat',
+            ], 400);
+        }
 
         // Cari bank info berdasarkan Client ID
         $bankInfo = BankInfo::where('client_id', $clientId)->first();
@@ -41,14 +41,14 @@ class AccessTokenController extends Controller
         }
 
         // Cek validitas timestamp (maksimal perbedaan 5 menit)
-        $requestTime = Carbon::parse($timestamp);
-        $currentTime = now();
-        if ($currentTime->diffInSeconds($requestTime) > 300) { // 5 menit
-            return response()->json([
-                "responseCode" => "4037300",
-                "responseMessage" => "timestampExpired"
-            ], 403);
-        }
+        // $requestTime = Carbon::parse($timestamp);
+        // $currentTime = now();
+        // if ($currentTime->diffInSeconds($requestTime) > 300) { // 5 menit
+        //     return response()->json([
+        //         "responseCode" => "4037300",
+        //         "responseMessage" => "timestampExpired"
+        //     ], 403);
+        // }
 
         // Buat payload untuk validasi signature
         $payload = $clientId . '|' . $timestamp;
@@ -171,14 +171,14 @@ class AccessTokenController extends Controller
         }
 
         // Cek validitas timestamp (maksimal perbedaan 5 menit)
-        $requestTime = Carbon::parse($timestamp);
-        $currentTime = now();
-        if ($currentTime->diffInSeconds($requestTime) > 300) { // 5 menit
-            return response()->json([
-                "responseCode" => "4037300",
-                "responseMessage" => "timestampExpired"
-            ], 403);
-        }
+        // $requestTime = Carbon::parse($timestamp);
+        // $currentTime = now();
+        // if ($currentTime->diffInSeconds($requestTime) > 300) { // 5 menit
+        //     return response()->json([
+        //         "responseCode" => "4037300",
+        //         "responseMessage" => "timestampExpired"
+        //     ], 403);
+        // }
 
         // Buat payload untuk validasi signature
         $httpMethod = $request->method();
