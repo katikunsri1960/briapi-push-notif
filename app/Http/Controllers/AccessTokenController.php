@@ -202,6 +202,7 @@ class AccessTokenController extends Controller
 
         // $notification = PaymentNotifications::createNotification($request->all());
         $dataInsert = [
+            'bank_info_id' => $bankInfo->id,
             'partner_service_id' => $request->partnerServiceId,
             'customer_no' => $request->customerNo,
             'virtual_account_no' => $request->virtualAccountNo,
