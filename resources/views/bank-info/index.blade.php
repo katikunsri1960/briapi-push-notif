@@ -13,7 +13,6 @@
                         <x-button-modal modalName='addBankInfo'>Add Bank Info</x-button-modal>
                     </div>
                     @include('bank-info.create')
-                    @include('bank-info.edit')
                     <div class="relative overflow-x-auto mt-6">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="search-table">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -36,9 +35,7 @@
                                     <td class="px-6 py-4">{{ Str::substr($d->rsa_public_key, 0, 64) }} ........</td>
                                     <td class="px-6 py-4">
                                         <div class="inline-flex">
-                                            <button @click="openEditModal({{ $d }})" class="m-2 px-4 py-2 bg-blue-600 text-white rounded-md">
-                                                <i class="fa fa-pencil"></i>
-                                            </button>
+                                            <x-link-button :href="route('bank-info.edit', $d)" class="m-2"><i class="fa fa-pencil"></i></x-link-button>
                                             <form x-data @submit.prevent="confirmDelete($event)" action="{{ route('bank-info.destroy', $d->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')

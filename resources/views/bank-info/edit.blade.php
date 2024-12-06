@@ -1,50 +1,70 @@
-<!-- resources/views/components/edit-modal.blade.php -->
-<x-modal name="editBankInfo" :show="false" maxWidth="2xl">
-    <div class="p-6">
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-5">
-            Edit Bank Info
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Bank Information') }} / Edit / {{ Str::upper($data->partner_id) }}
         </h2>
-        <hr>
-        <div class="my-3">
-            <form x-data="{ bankInfo: {} }" @submit.prevent="submitEditForm" action="{{ route('bank-info.update', '') }}" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="id" x-model="bankInfo.id">
-                <div class="mb-3">
-                    <x-input-label for="edit_partner_id" :value="__('PARTNER ID')" />
-                    <x-text-input id="edit_partner_id" class="block mt-1 w-full" type="text" name="partner_id" x-model="bankInfo.partner_id" required autofocus autocomplete="partner_id" />
-                    <x-input-error :messages="$errors->get('partner_id')" class="mt-2" />
+    </x-slot>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+
+                    <form x-data @submit.prevent="confirmSubmission($event)" action="{{ route('bank-info.update', $data->id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <div class="grid grid-cols-2 gap-6 mt-4 sm:grid-cols-3">
+                            <div>
+                                <x-input-label for="partner_id" :value="__('Partner ID')" />
+                                <x-text-input id="partner_id" class="block mt-1 w-full" type="text" name="partner_id" value="{{ $data->partner_id }}" required autofocus />
+                            </div>
+                            <div>
+                                <x-input-label for="client_id" :value="__('Client ID')" />
+                                <x-text-input id="client_id" class="block mt-1 w-full" type="text" name="client_id" value="{{ $data->client_id }}" required />
+                            </div>
+                            <div>
+                                <x-input-label for="client_secret" :value="__('Client Secret')" />
+                                <x-text-input id="client_secret" class="block mt-1 w-full" type="text" name="client_secret" value="{{ $data->client_secret }}" required />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-1">
+                            <div>
+                                <x-input-label for="rsa_public_key" :value="__('Public Key')" />
+                                <textarea name="rsa_public_key" id="rsa_public_key" rows="10" class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">{{$data->rsa_public_key}}</textarea>
+                            </div>
+                        </div>
+                        {{-- {{ $data->rsa_public_key }} --}}
+                        <div class="flex items center justify-end mt-4">
+                            <x-primary-button class="ml-4">
+                                {{ __('Update') }}
+                            </x-primary-button>
+
+                            <x-link-button :href="route('bank-info')" class="ml-4">
+                                {{ __('Cancel') }}
+                            </x-link-button>
+
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <x-input-label for="edit_client_id" :value="__('CLIENT ID')" />
-                    <x-text-input id="edit_client_id" class="block mt-1 w-full" type="text" name="client_id" x-model="bankInfo.client_id" required autofocus autocomplete="client_id" />
-                    <x-input-error :messages="$errors->get('client_id')" class="mt-2" />
-                </div>
-                <div class="mb-3">
-                    <x-input-label for="edit_client_secret" :value="__('CLIENT SECRET')" />
-                    <x-text-input id="edit_client_secret" class="block mt-1 w-full" type="text" name="client_secret" x-model="bankInfo.client_secret" required autofocus autocomplete="client_secret" />
-                    <x-input-error :messages="$errors->get('client_secret')" class="mt-2" />
-                </div>
-                <div class="mb-3">
-                    <x-input-label for="edit_rsa_public_key" :value="__('PUBLIC KEY')" />
-                    <x-textarea-input id="edit_rsa_public_key" class="block mt-1 w-full" name="rsa_public_key" x-model="bankInfo.rsa_public_key" required autofocus autocomplete="rsa_public_key" />
-                    <x-input-error :messages="$errors->get('rsa_public_key')" class="mt-2" />
-                </div>
-                <div class="mt-6 flex justify-end">
-                    <x-primary-button class="m-2">
-                        {{ __('Save') }}
-                    </x-primary-button>
-                    <x-secondary-button class="m-2" x-on:click="$dispatch('close-modal', 'editBankInfo')">
-                        {{ __('Close') }}
-                    </x-secondary-button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</x-modal>
 
 <script>
-    function submitEditForm(event) {
-        event.target.submit();
+    function confirmSubmission(event) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to submit the form?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, submit it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.submit();
+            }
+        });
     }
 </script>
+
+</x-app-layout>

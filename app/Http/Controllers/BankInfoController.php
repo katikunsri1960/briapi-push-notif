@@ -44,6 +44,14 @@ class BankInfoController extends Controller
         }
     }
 
+    public function edit(BankInfo $bankInfo)
+    {
+        // dd($bankInfo);
+        return view('bank-info.edit', [
+            'data' => $bankInfo
+        ]);
+    }
+
     public function update(Request $request, BankInfo $bankInfo)
     {
         $data = $request->validate([

@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [BankInfoController::class, 'index'])->name('bank-info');
         Route::post('/', [BankInfoController::class, 'store'])->name('bank-info.store');
         Route::delete('/{bankInfo}', [BankInfoController::class, 'destroy'])->name('bank-info.destroy');
+        Route::get('/{bankInfo}/edit', [BankInfoController::class, 'edit'])->name('bank-info.edit');
         Route::patch('/{bankInfo}', [BankInfoController::class, 'update'])->name('bank-info.update');
     });
 
