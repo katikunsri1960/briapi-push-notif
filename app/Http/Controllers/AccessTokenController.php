@@ -225,7 +225,7 @@ class AccessTokenController extends Controller
         return response()->json([
             'responseCode' => '2003400',
             'responseMessage' => 'Successful',
-            'data' => $dataInsert,
+            'virtualAccountData' => $request->all(),
         ], 200);
     }
 }
