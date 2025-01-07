@@ -118,7 +118,7 @@ class AccessTokenController extends Controller
         }
 
         // Validasi format timestamp (ISO 8601 dengan milidetik)
-        if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp) || !preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}(\+|\-)\d{2}:\d{2}/', $timestamp)) {
+        if (!preg_match('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(\+|\-)\d{2}:\d{2}/', $timestamp)) {
             return response()->json([
                 'responseCode' => '4003401',
                 'responseMessage' => 'Invalid Field Format. Invalid (X-TIMESTAMP)',
