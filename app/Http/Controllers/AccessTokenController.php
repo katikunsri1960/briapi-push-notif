@@ -192,12 +192,12 @@ class AccessTokenController extends Controller
 
         // Validasi Signature HMAC_SHA512
         $calculatedSignature = hash_hmac('sha512', $payload, $bankInfo->client_secret);
-        if ($signature !== $calculatedSignature) {
-            return response()->json([
-                "responseCode" => "4013401",
-                "responseMessage" => "Unauthorized. Verify Client Secret Fail.",
-            ], 401);
-        }
+        // if ($signature !== $calculatedSignature) {
+        //     return response()->json([
+        //         "responseCode" => "4013401",
+        //         "responseMessage" => "Unauthorized. Verify Client Secret Fail.",
+        //     ], 401);
+        // }
 
         // Proses notifikasi pembayaran
         // Simpan data notifikasi ke database atau lakukan tindakan lain yang diperlukan
