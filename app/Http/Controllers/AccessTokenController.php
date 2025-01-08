@@ -195,7 +195,7 @@ class AccessTokenController extends Controller
         if ($signature !== $calculatedSignature) {
             return response()->json([
                 "responseCode" => "4013401",
-                "responseMessage" => "Unauthorized. Verify Client Secret Fail.",
+                "responseMessage" => "Unauthorized. Invalid Signature",
             ], 401);
         }
 
